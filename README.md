@@ -29,3 +29,10 @@ Bu proje, temel HTTP isteklerini yapmak için bir C++ istemcisi uygular. Kullan�
 ```bash
 winsock baslatildi
 lutfen URL giriniz: http://google.com
+
+## !!!!!!!!NOT!!!!!!!!!
+proje şuanda temel düzeyde geliştirilmeye açık
+
+
+
+
