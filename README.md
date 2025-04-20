@@ -25,10 +25,6 @@ Bu proje, temel HTTP isteklerini yapmak için bir C++ istemcisi uygular. Kullan�
    - Başlıklar (Headers) ve içerik (Body) şeklinde iki ana bölümde gösterilir.
    - Eğer URL yönlendirilmişse, 301 veya 302 HTTP durum koduyla birlikte yönlendirme adresi de gösterilir.
 
-Örnek kullanım:
-```bash
-winsock baslatildi
-lutfen URL giriniz: http://google.com
 
 ## !!!!!!!!NOT!!!!!!!!!
 proje şuanda temel düzeyde geliştirilmeye açık
