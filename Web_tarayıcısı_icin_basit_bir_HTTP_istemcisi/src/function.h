@@ -3,7 +3,8 @@
 #include<WinSock2.h>
 #include<WS2tcpip.h>
 #include<iostream>
-
+#include<fstream>
+#include<string>
 #pragma comment(lib,"ws2_32.lib")// winsock kütüphanesini projeye baðlar
 
 
@@ -70,8 +71,9 @@ SOCKET CreateSocket(const std::string& host)
 	return connet;
 }
 
-void sendHTTPrequest(SOCKET connet ,const std::string& URL)
+void sendHTTPrequest(SOCKET connet ,const std::string& URL,std::string method,const std::string postData)
 {
+	//-----------------------URL PARÇALAMA KISMI-----------------------------------
 
 	std::string fullURL = URL;
 	if (fullURL.find("http://") == std::string::npos && fullURL.find("https://") == std::string::npos) {
@@ -84,21 +86,46 @@ void sendHTTPrequest(SOCKET connet ,const std::string& URL)
 		fullURL = fullURL.substr(pos + 3); // "http://" ya da "https://" kýsmýný kaldýr
 	}
 
+	// Host ve path ayýrma
+	std::string host;
+	std::string path = "/";
 	size_t pathPos = fullURL.find("/");
-	if (pathPos == std::string::npos) {
-		fullURL += "/"; // Eðer URL'de bir yol yoksa, ekleyin
+	if (pathPos != std::string::npos) {
+		host = fullURL.substr(0, pathPos);
+		path = fullURL.substr(pathPos);
+	}
+	else {
+		host = fullURL;
 	}
 
+	//-----------------------GETKISMI-------------------------------------
 
-
-	std::string request = "GET /" + fullURL.substr(fullURL.find("/")) + " HTTP/1.1\r\n";
-	request += "Host: " + fullURL.substr(0, fullURL.find("/")) + "\r\n";  // Host sadece domain kýsmý
+	std::string request;
+	if (method == "POST") {
+		request = "POST " + path + " HTTP/1.1\r\n";
+	}
+	else {
+		request = "GET " + path + " HTTP/1.1\r\n";
+	}
+	request += "Host: " + host + "\r\n";
 	request += "User-Agent: MySimpleHttpClient/1.0\r\n";
 	request += "Connection: close\r\n";
-	request += "\r\n"; // Son boþ satýr
+	//-----------------POST KISMI----------------------------
 
-	// Ýstek gönder
-	send(connet, request.c_str(), request.size(), 0);
+	if (method == "POST") {
+		request += "Content-Type: application/x-www-form-urlencoded\r\n";
+		request += "Content-Length: " + std::to_string(postData.length()) + "\r\n";
+		request += "\r\n"; // Header ve Body arasýndaki boþluk
+		request += postData;
+	}
+	else {
+		request += "\r\n"; // GET isteði için sadece header bitimi
+	}
+	
+
+
+	
+	send(connet, request.c_str(), request.length(), 0);
 }
 
 void receiveResponse(SOCKET connet) {
@@ -107,6 +134,8 @@ void receiveResponse(SOCKET connet) {
 	std::string response;
 
 	int bytesReceived = 0;
+
+	std::string bodyPart;
 
 	do
 	{
@@ -119,16 +148,37 @@ void receiveResponse(SOCKET connet) {
 
 	std::string::size_type pos = response.find("\r\n\r\n");
 
-	if (pos != std::string::npos)
-	{
-		std::string htmlContent = response.substr(pos + 4); // 4 çünkü "\r\n\r\n" 4 karakter
-		std::cout << "=== HTML ÝÇERÝÐÝ ===" << std::endl;
-		std::cout << htmlContent << std::endl;
+	if (pos != std::string::npos) {
+		std::string headers = response.substr(0, pos);
+		std::string body = response.substr(pos + 4); // +4 çünkü "\r\n\r\n" 4 karakterdir
+
+		std::cout << "[Header]:\n" << headers << "\n";	
+		std::cout << "[Body]:\n" << body << "\n";
+		bodyPart += body;
+		
+		while ((bytesReceived = recv(connet, buffer, bufferSize, 0)) > 0) {
+			bodyPart.append(buffer, bytesReceived);
+		}
 	}
-	else
-	{
-		std::cerr << "HTML içeriði ayrýþtýrýlamadý." << std::endl;
+
+	else {
+		std::cerr << "HTTP yanýtý geçersiz veya eksik!\n";
 	}
+  
+	std::ofstream out("txt.html");
+	if (out.is_open()) {
+		out << bodyPart;
+	}
+	else {
+		std::cerr << "Dosya oluþturulamadý!\n";
+	}
+
+}
+
+void PostHttpRequest(SOCKET connet,const std::string postData)
+{
+
+
 
 
 
