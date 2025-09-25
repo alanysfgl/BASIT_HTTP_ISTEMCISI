@@ -1,34 +1,23 @@
-# BASIT_HTTP_ISTEMCISI
+# SimpleHTTPClient
 
+## 📖 Description
+**SimpleHTTPClient** is a C++ application that allows users to perform basic HTTP requests.  
+Users can input a URL and receive the HTTP response, including headers and body content.  
+The client also supports automatic handling of HTTP redirects (301 and 302).  
+It demonstrates **network programming**, **TCP/IP connections**, and understanding of the **HTTP protocol**.
 
-Bu proje, temel HTTP isteklerini yapmak için bir C++ istemcisi uygular. Kullanıcılar, URL girerek HTTP yanıtlarını alabilirler. Proje, HTTP 301 ve 302 yönlendirmelerini takip etme yeteneğine de sahiptir. Bu istemci, temel olarak TCP bağlantısı kurarak HTTP sunucularına GET istekleri gönderir ve yanıtları alır.
+---
 
-## Özellikler
-- **GET İstekleri**: Kullanıcıların belirttiği URL'lere GET istekleri gönderir.
-- **Yönlendirmeleri Takip Etme**: HTTP 301 ve 302 yönlendirmelerini otomatik olarak takip eder.
-- **Bağlantı Yönetimi**: WinSock kütüphanesi kullanılarak TCP/IP bağlantıları yönetilir.
+## ✨ Features
+- **GET Requests**: Send GET requests to specified URLs  
+- **Redirect Handling**: Automatically follows HTTP 301 and 302 redirects  
+- **TCP Connection Management**: Manages network connections using WinSock (on Windows)  
 
-## Gereksinimler
-- **C++ Derleyici** (Örneğin, `g++` veya Visual Studio)
-- **WinSock Kütüphanesi** (Windows üzerinde çalışır)
+---
 
-## Kurulum ve Derleme
-1. Projeyi bilgisayarınıza indirin.
-2. C++ derleyicisini kullanarak projeyi derleyin.
-   - Örnek: `g++ main.cpp -o http_client -lws2_32`
-3. Programı çalıştırın.
-
-## Kullanım
-1. Programı çalıştırdığınızda, kullanıcıdan bir URL girilmesi istenir.
-2. URL'yi girdikten sonra, HTTP yanıtı terminalde görüntülenir.
-3. HTTP yanıtı:
-   - Başlıklar (Headers) ve içerik (Body) şeklinde iki ana bölümde gösterilir.
-   - Eğer URL yönlendirilmişse, 301 veya 302 HTTP durum koduyla birlikte yönlendirme adresi de gösterilir.
-
-
-## !!!!!!!!NOT!!!!!!!!!
-proje şuanda temel düzeyde geliştirilmeye açık
-
+## 🛠 Requirements
+- **C++ Compiler** (e.g., `g++` or Visual Studio)  
+- **WinSock Library** (Windows only)  
 
 
 
