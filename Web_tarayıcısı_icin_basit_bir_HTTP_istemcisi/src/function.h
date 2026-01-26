@@ -5,7 +5,7 @@
 #include<iostream>
 #include<fstream>
 #include<string>
-#pragma comment(lib,"ws2_32.lib")// winsock kütüphanesini projeye bağlar
+#pragma comment(lib,"ws2_32.lib")  // winsock kÃ¼tÃ¼phanesini projeye baÃ°lar
 
 
 
@@ -52,7 +52,7 @@ SOCKET CreateSocket(const std::string& host)
 	hostent* server = gethostbyname(host.c_str());
 	if (server == nullptr)
 	{
-		std::cerr << "sunucu adı cozumlenmedi" << std::endl;
+		std::cerr << "sunucu adÃ½ cozumlenmedi" << std::endl;
 		exit(1);
 
 	}
@@ -73,20 +73,20 @@ SOCKET CreateSocket(const std::string& host)
 
 void sendHTTPrequest(SOCKET connet ,const std::string& URL,std::string method,const std::string postData)
 {
-	//-----------------------URL PARÇALAMA KISMI-----------------------------------
+	//-----------------------URL PARÃ‡ALAMA KISMI-----------------------------------
 
 	std::string fullURL = URL;
 	if (fullURL.find("http://") == std::string::npos && fullURL.find("https://") == std::string::npos) {
 		fullURL = "http://" + fullURL;
 	}
 
-	// URL'yi doğru şekilde işleyin, sadece path kısmını almak gerekebilir
+	// URL'yi doÃ°ru Ã¾ekilde iÃ¾leyin, sadece path kÃ½smÃ½nÃ½ almak gerekebilir
 	size_t pos = fullURL.find("://");
 	if (pos != std::string::npos) {
-		fullURL = fullURL.substr(pos + 3); // "http://" ya da "https://" kısmını kaldır
+		fullURL = fullURL.substr(pos + 3); // "http://" ya da "https://" kÃ½smÃ½nÃ½ kaldÃ½r
 	}
 
-	// Host ve path ayırma
+	// Host ve path ayÃ½rma
 	std::string host;
 	std::string path = "/";
 	size_t pathPos = fullURL.find("/");
@@ -115,11 +115,11 @@ void sendHTTPrequest(SOCKET connet ,const std::string& URL,std::string method,co
 	if (method == "POST") {
 		request += "Content-Type: application/x-www-form-urlencoded\r\n";
 		request += "Content-Length: " + std::to_string(postData.length()) + "\r\n";
-		request += "\r\n"; // Header ve Body arasındaki boşluk
+		request += "\r\n"; // Header ve Body arasÃ½ndaki boÃ¾luk
 		request += postData;
 	}
 	else {
-		request += "\r\n"; // GET isteği için sadece header bitimi
+		request += "\r\n"; // GET isteÃ°i iÃ§in sadece header bitimi
 	}
 	
 
@@ -150,7 +150,7 @@ void receiveResponse(SOCKET connet) {
 
 	if (pos != std::string::npos) {
 		std::string headers = response.substr(0, pos);
-		std::string body = response.substr(pos + 4); // +4 çünkü "\r\n\r\n" 4 karakterdir
+		std::string body = response.substr(pos + 4); // +4 Ã§Ã¼nkÃ¼ "\r\n\r\n" 4 karakterdir
 
 		std::cout << "[Header]:\n" << headers << "\n";	
 		std::cout << "[Body]:\n" << body << "\n";
@@ -162,7 +162,7 @@ void receiveResponse(SOCKET connet) {
 	}
 
 	else {
-		std::cerr << "HTTP yanıtı geçersiz veya eksik!\n";
+		std::cerr << "HTTP yanÃ½tÃ½ geÃ§ersiz veya eksik!\n";
 	}
   
 	std::ofstream out("txt.html");
@@ -170,16 +170,8 @@ void receiveResponse(SOCKET connet) {
 		out << bodyPart;
 	}
 	else {
-		std::cerr << "Dosya oluşturulamadı!\n";
+		std::cerr << "Dosya oluÃ¾turulamadÃ½!\n";
 	}
 
 }
 
-void PostHttpRequest(SOCKET connet,const std::string postData)
-{
-
-
-
-
-
-}
